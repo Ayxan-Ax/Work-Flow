@@ -86,8 +86,9 @@ a {
 
 .top {
   display: flex;
-  gap: 28px;
+  gap: 40px;
   align-items: center;
+  justify-content: center;
   height: 56px;
   padding: 0 32px;
   border-bottom: 1px solid var(--border);
@@ -216,8 +217,8 @@ a {
 }
 
 .brand img {
-  height: 36px;
-  width: auto;
+  height: 36px !important;
+  width: auto !important;
   display: block;
 }
 

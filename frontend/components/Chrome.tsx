@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 
 /**
@@ -14,28 +13,29 @@ import { usePathname } from 'next/navigation';
 export function TopNav() {
   const pathname = usePathname();
 
-  const tabs = [
+  const tabsBefore = [
     { href: '/', label: 'Overview' },
     { href: '/workflows', label: 'Workflows' },
   ];
 
-  const tabsAfterBrand = [
-    { href: '/workflows/wf_purchase_request/automation', label: 'Automation' },
+  const tabsAfter = [
+    { href: '/automation', label: 'Automation' },
+    { href: '/activity', label: 'Activity' },
   ];
 
   return (
     <nav className="top">
-      {tabs.map((tab) => (
+      {tabsBefore.map((tab) => (
         <NavTab key={tab.href} {...tab} active={isActive(pathname, tab.href)} />
       ))}
 
       <Link className="brand" href="/">
         {/* Logo from the designer handoff: workflowplan/04_FRONTEND/ui/screens/hososhi-mark.png */}
-        <Image src="/hososhi-mark.png" alt="" width={36} height={36} priority />
+        <img src="/hososhi-mark.png" alt="" width={36} height={36} />
         <b>HOSOSHI</b>
       </Link>
 
-      {tabsAfterBrand.map((tab) => (
+      {tabsAfter.map((tab) => (
         <NavTab key={tab.href} {...tab} active={isActive(pathname, tab.href)} />
       ))}
     </nav>
@@ -72,10 +72,22 @@ function NavTab({
   );
 }
 
-/** Overview is only active on its own route; the others match on path prefix. */
+/**
+ * Exactly one tab is active at a time.
+ *
+ * Automation and Activity have their own top-level routes, so the workflow screens
+ * below /workflows must not light up the Workflows tab while an automation or run
+ * screen is open.
+ */
 function isActive(pathname: string, href: string): boolean {
   if (href === '/') return pathname === '/';
-  return pathname.startsWith(href) || (href === '/workflows' && pathname.startsWith('/workflows/'));
+  if (href === '/workflows') {
+    return (
+      pathname === '/workflows' ||
+      (pathname.startsWith('/workflows/') && !pathname.includes('/automation'))
+    );
+  }
+  return pathname === href || pathname.startsWith(`${href}/`);
 }
 
 /** The sawtooth rule between the nav and the content. */

@@ -35,7 +35,8 @@ async function load<T>(file: string): Promise<T> {
   const hit = cache.get(file);
   if (hit) return structuredClone(hit) as T;
 
-  const res = await fetch(`/fixtures/${file}`, { cache: 'force-cache' });
+  // no-cache so an edited fixture shows up on reload during development
+const res = await fetch(`/fixtures/${file}`, { cache: 'no-cache' });
   if (!res.ok) {
     throw new ApiError(`Fixture ${file} could not be loaded.`, {
       code: 'INTERNAL_ERROR',

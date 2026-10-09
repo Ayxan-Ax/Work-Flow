@@ -14,5 +14,31 @@
       "last_activity_at": null
     }
   ],
-  "recent_activity": []
+  "recent_activity": [
+    {
+      "at": null,
+      "label": "Approval requested",
+      "workflow_name": "Purchase Request Processing"
+    },
+    {
+      "at": null,
+      "label": "Step completed",
+      "workflow_name": "Purchase Request Processing"
+    },
+    {
+      "at": null,
+      "label": "Evidence retrieved",
+      "workflow_name": null
+    },
+    {
+      "at": null,
+      "label": "Automation run started",
+      "workflow_name": "Purchase Request Processing"
+    },
+    {
+      "at": null,
+      "label": "Workflow updated",
+      "workflow_name": "Purchase Request Processing"
+    }
+  ]
 }
