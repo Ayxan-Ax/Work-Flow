@@ -25,9 +25,11 @@ export function TopNav() {
 
   return (
     <nav className="top">
-      {tabsBefore.map((tab) => (
-        <NavTab key={tab.href} {...tab} active={isActive(pathname, tab.href)} />
-      ))}
+      <div className="nav-group left">
+        {tabsBefore.map((tab) => (
+          <NavTab key={tab.href} {...tab} active={isActive(pathname, tab.href)} />
+        ))}
+      </div>
 
       <Link className="brand" href="/">
         {/* Logo from the designer handoff: workflowplan/04_FRONTEND/ui/screens/hososhi-mark.png */}
@@ -35,9 +37,11 @@ export function TopNav() {
         <b>HOSOSHI</b>
       </Link>
 
-      {tabsAfter.map((tab) => (
-        <NavTab key={tab.href} {...tab} active={isActive(pathname, tab.href)} />
-      ))}
+      <div className="nav-group right">
+        {tabsAfter.map((tab) => (
+          <NavTab key={tab.href} {...tab} active={isActive(pathname, tab.href)} />
+        ))}
+      </div>
     </nav>
   );
 }
@@ -51,23 +55,23 @@ function NavTab({
   label: string;
   active: boolean;
 }) {
+  // Inactive: plain tab. Active: tab with .cut class — both share identical margin (0 5px)
+  // so dimensions never change when switching. The animation only plays on .cut.
   if (!active) {
     return (
-      <Link className="nav" href={href}>
+      <Link className="tab" href={href}>
         {label}
       </Link>
     );
   }
 
   return (
-    <Link className="nav on" href={href} aria-current="page">
-      <span className="cut">
-        <span className="ca">{label}</span>
-        <span className="cb" aria-hidden="true">
-          {label}
-        </span>
-        <i aria-hidden="true" />
+    <Link className="tab cut" href={href} aria-current="page">
+      <span className="ca">{label}</span>
+      <span className="cb" aria-hidden="true">
+        {label}
       </span>
+      <i aria-hidden="true" />
     </Link>
   );
 }
