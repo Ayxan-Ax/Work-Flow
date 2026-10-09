@@ -104,7 +104,107 @@ a {
 .top .nav.on {
   color: var(--indigo);
   font-weight: 600;
-  border-bottom-color: var(--accent);
+  padding: 17px 0 15px;
+}
+
+/*
+ * Active-tab slash effect (from the designer's spec).
+ * Two copies of the label: the upper one clipped above a diagonal, the lower one
+ * below it, with a tapered red blade crossing the cut. The second copy is
+ * aria-hidden so screen readers read the label once.
+ * Total under 400 ms, and it plays only when a tab becomes active.
+ */
+.cut {
+  position: relative;
+  display: inline-block;
+  line-height: 20px;
+  font-weight: 600;
+  margin: 0 5px;
+}
+
+.cut .ca,
+.cut .cb {
+  color: var(--indigo);
+}
+
+.cut .ca {
+  display: block;
+  clip-path: polygon(
+    -6px -6px,
+    calc(100% + 6px) -6px,
+    calc(100% + 6px) 22%,
+    -6px 106%
+  );
+  transform: translate(-3px, -2px);
+}
+
+.cut .cb {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: block;
+  clip-path: polygon(
+    -6px 106%,
+    calc(100% + 6px) 22%,
+    calc(100% + 6px) 140%,
+    -6px 140%
+  );
+  transform: translate(4px, 3px);
+}
+
+.cut i {
+  position: absolute;
+  left: -14%;
+  width: 128%;
+  top: 64%;
+  height: 3px;
+  margin-top: -1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--accent) 22%,
+    var(--accent) 78%,
+    transparent
+  );
+  transform: rotate(-12deg);
+  clip-path: polygon(0 50%, 50% 0, 100% 50%, 50% 100%);
+}
+
+@keyframes sw {
+  0% {
+    scale: 0 1;
+  }
+  100% {
+    scale: 1;
+  }
+}
+
+@keyframes ka {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(-3px, -2px);
+  }
+}
+
+@keyframes kb {
+  100% {
+    transform: translate(4px, 3px);
+  }
+}
+
+.cut i {
+  transform-origin: left center;
+  animation: 0.15s ease-out 0s 1 normal both running sw;
+}
+
+.cut .ca {
+  animation: 0.2s ease-out 0.15s 1 normal both running ka;
+}
+
+.cut .cb {
+  animation: 0.2s ease-out 0.15s 1 normal both running kb;
 }
 
 .brand {
@@ -113,6 +213,12 @@ a {
   gap: 10px;
   padding: 0 20px;
   text-decoration: none;
+}
+
+.brand img {
+  height: 36px;
+  width: auto;
+  display: block;
 }
 
 .brand b {
@@ -729,6 +835,12 @@ textarea.inp:focus,
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .cut i,
+  .cut .ca,
+  .cut .cb {
+    animation: auto ease 0s 1 normal none running none;
+  }
+
   * {
     animation: none !important;
     transition: none !important;

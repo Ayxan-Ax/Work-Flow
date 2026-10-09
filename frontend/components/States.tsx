@@ -62,13 +62,6 @@ export function StateCard({
   );
 }
 
-const TONE_COLOR: Record<Tone, string> = {
-  busy: 'var(--indigo)',
-  empty: 'var(--muted)',
-  error: 'var(--accent)',
-  wait: 'var(--review-fg)',
-};
-
 export function SkeletonLines({ count = 3 }: { count?: number }) {
   return (
     <>

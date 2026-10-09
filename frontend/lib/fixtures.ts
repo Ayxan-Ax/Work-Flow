@@ -189,7 +189,7 @@ export async function getFixture(
 ): Promise<unknown> {
   const path = rawPath.split('?')[0];
   const key = `${method} ${path}`;
-  const notFound = (): never => {
+  const notFound: () => never = () => {
     throw new ApiError(`No fixture registered for ${key}.`, {
       code: 'NOT_FOUND',
       retryable: false,
@@ -255,16 +255,18 @@ export async function getFixture(
 
   const runMatch = /^\/api\/v1\/runs\/([^/]+)$/.exec(path);
   if (method === 'GET' && runMatch) {
-    if (!runState) notFound();
-    return runState.run;
+    const state = runState;
+    if (!state) notFound();
+    return state.run;
   }
 
   const approvalMatch = /^\/api\/v1\/approvals\/([^/]+)$/.exec(path);
   if (method === 'POST' && approvalMatch) {
-    if (!runState) notFound();
+    const state = runState;
+    if (!state) notFound();
 
     // Mirrors the backend rule: only POST /approvals advances a HUMAN REQUIRED step.
-    if (runState.run.state !== 'waiting_approval') {
+    if (state.run.state !== 'waiting_approval') {
       throw new ApiError('This approval was already decided.', {
         code: 'INVALID_STATE_TRANSITION',
         retryable: false,
@@ -277,7 +279,7 @@ export async function getFixture(
     const approved = decision.decision === 'approve';
     const at_time = now();
 
-    runState.approval = {
+    state.approval = {
       approval_id: APPROVAL_ID,
       run_id: RUN_ID,
       state: approved ? 'approved' : 'rejected',
@@ -285,7 +287,7 @@ export async function getFixture(
       decided_at: at_time,
     };
 
-    const approvalStep = runState.run.steps.find((s) => s.step_id === 'stp_approval');
+    const approvalStep = state.run.steps.find((s) => s.step_id === 'stp_approval');
     if (approvalStep) {
       approvalStep.state = approved ? 'completed' : 'rejected';
       approvalStep.actor = decision.approver_id ?? null;
@@ -293,7 +295,7 @@ export async function getFixture(
     }
 
     if (approved) {
-      const poStep = runState.run.steps.find((s) => s.step_id === 'stp_po');
+      const poStep = state.run.steps.find((s) => s.step_id === 'stp_po');
       if (poStep) {
         poStep.state = 'completed';
         poStep.actor = 'system';
@@ -310,19 +312,20 @@ export async function getFixture(
         created_at: at_time,
         created_by: 'system',
       };
-      runState.run.purchase_order = po;
+      state.run.purchase_order = po;
     }
 
-    runState.run.state = approved ? 'completed' : 'rejected';
-    runState.run.finished_at = at_time;
-    runState.run.blocked_on = null;
+    state.run.state = approved ? 'completed' : 'rejected';
+    state.run.finished_at = at_time;
+    state.run.blocked_on = null;
 
-    return runState.approval;
+    return state.approval;
   }
 
   const resultsMatch = /^\/api\/v1\/results\/([^/]+)$/.exec(path);
   if (method === 'GET' && resultsMatch) {
-    if (!runState) notFound();
+    const state = runState;
+    if (!state) notFound();
     // Nothing was measured: every metric is null, so the UI must say "not measured".
     const block = (label: string) => ({
       label,
