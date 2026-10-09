@@ -6,7 +6,6 @@ import { useResource } from '@/lib/useResource';
 import { metric } from '@/lib/format';
 import { ClassBadge } from '@/components/ClassBadge';
 import { EmptyCard } from '@/components/States';
-import { MetaFooter } from '@/components/MetaFooter';
 import { Breadcrumb } from '@/components/Chrome';
 import type { Analysis } from '@/lib/types';
 
@@ -53,8 +52,6 @@ export function AutomationList() {
           <RunsTable dash={dash} />
         </div>
       </div>
-
-      <MetaFooter />
     </>
   );
 }

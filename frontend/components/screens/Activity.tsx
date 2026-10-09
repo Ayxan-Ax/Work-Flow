@@ -5,7 +5,6 @@ import { api } from '@/lib/api';
 import { useResource } from '@/lib/useResource';
 import { clockTime } from '@/lib/format';
 import { EmptyCard, ErrorCard, LoadingCard } from '@/components/States';
-import { MetaFooter } from '@/components/MetaFooter';
 import { Breadcrumb } from '@/components/Chrome';
 import type { DashboardActivity } from '@/lib/types';
 
@@ -67,8 +66,6 @@ export function Activity() {
           <ActivityList items={dash.data.recent_activity} filter={filter} />
         ) : null}
       </div>
-
-      <MetaFooter />
     </>
   );
 }

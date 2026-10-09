@@ -85,6 +85,7 @@ a {
 /* ---------- top navigation ---------- */
 
 .top {
+  position: relative;
   display: flex;
   gap: 40px;
   align-items: center;
@@ -99,12 +100,18 @@ a {
   color: var(--muted);
   text-decoration: none;
   padding: 17px 0 15px;
-  border-bottom: 2px solid transparent;
+  /*
+   * Every tab carries the active weight. The active tab is bolder in the design, but a
+   * weight change alters the label width, which moved the whole bar by a few pixels on
+   * every navigation. Colour plus the slash already mark the active tab.
+   */
+  font-weight: 600;
+  position: relative;
+  z-index: 1;
 }
 
 .top .nav.on {
   color: var(--indigo);
-  font-weight: 600;
   padding: 17px 0 15px;
 }
 
@@ -208,14 +215,24 @@ a {
   animation: 0.2s ease-out 0.15s 1 normal both running kb;
 }
 
+/*
+ * The brand is pinned to the true centre of the bar. Tab widths change as a tab becomes
+ * active (the active label is bolder), so a flex-laid brand would drift a few pixels
+ * between pages — which reads as the logo jumping.
+ */
 .brand {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 0 20px;
+  background: var(--bg);
   text-decoration: none;
 }
 
+/* Tabs flow around the centred brand instead of under it. */
 .brand img {
   height: 36px !important;
   width: auto !important;
